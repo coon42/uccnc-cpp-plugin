@@ -105,7 +105,6 @@ public:
     UC = uc;
   }
 
-protected:
   PluginInterfaceEntry UC{ 0 };
 
 private:
