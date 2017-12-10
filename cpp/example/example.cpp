@@ -28,6 +28,6 @@ void ExamplePlugin::textFieldTextTypedEvent(UccncField label, bool isMainScreen,
   trace();
 }
 
-UccncPlugin* UccncPlugin::create() {
-  return new ExamplePlugin();
+bool UccncPlugin::create() {
+  return UccncPlugin::_create<ExamplePlugin>();
 }
