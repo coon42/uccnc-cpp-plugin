@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.27004.2009
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "plugin_gateway", "plugin_gateway\plugin_gateway.csproj", "{833AB583-1D7E-4A87-B28A-AF828B2948FF}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "example", "cpp\example\example.vcxproj", "{F04719F6-5043-44A4-A017-B1BE8AD86C4B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -15,6 +17,10 @@ Global
 		{833AB583-1D7E-4A87-B28A-AF828B2948FF}.Debug|x86.Build.0 = Debug|x86
 		{833AB583-1D7E-4A87-B28A-AF828B2948FF}.Release|x86.ActiveCfg = Release|x86
 		{833AB583-1D7E-4A87-B28A-AF828B2948FF}.Release|x86.Build.0 = Release|x86
+		{F04719F6-5043-44A4-A017-B1BE8AD86C4B}.Debug|x86.ActiveCfg = Debug|Win32
+		{F04719F6-5043-44A4-A017-B1BE8AD86C4B}.Debug|x86.Build.0 = Debug|Win32
+		{F04719F6-5043-44A4-A017-B1BE8AD86C4B}.Release|x86.ActiveCfg = Release|Win32
+		{F04719F6-5043-44A4-A017-B1BE8AD86C4B}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
