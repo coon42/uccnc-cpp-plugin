@@ -9,7 +9,19 @@ void ExamplePlugin::onFirstCycle() {
 }
 
 void ExamplePlugin::onTick() {
-  trace();
+  // trace();
+
+  static int _cnt = 0;
+
+  if (_cnt++ == 5) {
+    dbg("Coordinates: \n"
+      "X=%f, Y=%f, Z=%f\n"
+      "A=%f, B=%f, C=%f\n",
+      UC.getXpos(), UC.getYpos(), UC.getZpos(),
+      UC.getApos(), UC.getBpos(), UC.getCpos());
+
+    _cnt = 0;
+  }
 }
 
 void ExamplePlugin::onShutdown() {
