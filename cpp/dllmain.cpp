@@ -1,12 +1,11 @@
 ﻿#include <windows.h>
 #include "uccncplugin.h"
 
-static UccncPlugin* _pUccncPlugin = nullptr;
-
 BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserved) {
   switch (ul_reason_for_call) {
     case DLL_PROCESS_ATTACH:
-      _pUccncPlugin = UccncPlugin::create();
+      if(!UccncPlugin::create())
+        dbg("Failed creating plugin instance!\n");
       break;
 
     case DLL_THREAD_ATTACH:
@@ -16,12 +15,8 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserv
       break;
 
     case DLL_PROCESS_DETACH:
-      if (_pUccncPlugin) {
-        delete _pUccncPlugin;
-
-        _pUccncPlugin = nullptr;
-      }
-
+      if (!UccncPlugin::_destroy())
+        dbg("Failed destroying plugin instance!\n");
       break;
   }
 
@@ -31,41 +26,41 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserv
 extern "C" {
   __declspec(dllexport)
   void __cdecl setCallBacks(PluginInterfaceEntry uc) {
-    return _pUccncPlugin->setCallBacks(uc);
+    return UccncPlugin::_instance()->setCallBacks(uc);
   }
 
   __declspec(dllexport)
   void __cdecl onFirstCycle() {
-    return _pUccncPlugin->onFirstCycle();
+    return UccncPlugin::_instance()->onFirstCycle();
   }
 
   __declspec(dllexport)
   void __cdecl onTick() {
-    return _pUccncPlugin->onTick();
+    return UccncPlugin::_instance()->onTick();
   }
 
   __declspec(dllexport)
   void __cdecl onShutdown() {
-    return _pUccncPlugin->onShutdown();
+    return UccncPlugin::_instance()->onShutdown();
   }
 
   __declspec(dllexport)
   void __cdecl buttonpress_event(UccncButton button, bool onScreen) {
-    _pUccncPlugin->buttonPressEvent(button, onScreen);
+    return UccncPlugin::_instance()->buttonPressEvent(button, onScreen);
   }
 
   __declspec(dllexport)
   void __cdecl textfieldclick_event(UccncField label, bool isMainScreen) {
-    _pUccncPlugin->textFieldClickEvent(label, isMainScreen);
+    return UccncPlugin::_instance()->textFieldClickEvent(label, isMainScreen);
   }
 
   __declspec(dllexport)
   void __cdecl textfieldtexttyped_event(UccncField label, bool isMainScreen, const char* pText) {
-    _pUccncPlugin->textFieldTextTypedEvent(label, isMainScreen, pText);
+    return UccncPlugin::_instance()->textFieldTextTypedEvent(label, isMainScreen, pText);
   }
 
   __declspec(dllexport)
   void __cdecl getproperties_event(char* pAuthor, char* pPluginName, char* pPluginVersion) {
-    _pUccncPlugin->getPropertiesEvent(pAuthor, pPluginName, pPluginVersion);
+    return UccncPlugin::_instance()->getPropertiesEvent(pAuthor, pPluginName, pPluginVersion);
   }
 }

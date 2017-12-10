@@ -3,6 +3,7 @@
 
 #include <windows.h>
 #include <string>
+#include "singleton.h"
 #include "uccnc_types.h"
 #include "debug.h"
 
@@ -39,9 +40,9 @@ struct PluginInterfaceEntry {
   decltype(_getCpos)*        pCgetCpos;
 };
 
-class UccncPlugin {
+class UccncPlugin : public FactorySingleton<UccncPlugin> {
 public:
-  static UccncPlugin* create(); // Implement this method in your plugins .cpp file.
+  static bool create(); // Implement this method in your plugins .cpp file.
 
   // Example:
   //
@@ -52,8 +53,8 @@ public:
   // ---------------------------------------
   //
   // ---------------------------------------
-  // UccncPlugin* UccncPlugin::create() {
-  //   return new YourPlugin();
+  // bool UccncPlugin::create() {
+  //   return UccncPlugin::_create<YourPlugin>();
   // }
   // ---------------------------------------
 
