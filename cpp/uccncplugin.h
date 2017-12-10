@@ -27,17 +27,17 @@ extern "C" {
 }
 
 struct PluginInterfaceEntry {
-  decltype(_getField)*       pGetField;
-  decltype(_getFieldInt)*    pGetFieldInt;
-  decltype(_getFieldDouble)* pGetFieldDouble;
-  decltype(_GetLed)*         pGetLed;
-  decltype(_isMoving)*       pIsMoving;
-  decltype(_getXpos)*        pCgetXpos;
-  decltype(_getYpos)*        pCgetYpos;
-  decltype(_getZpos)*        pCgetZpos;
-  decltype(_getApos)*        pCgetApos;
-  decltype(_getBpos)*        pCgetBpos;
-  decltype(_getCpos)*        pCgetCpos;
+  decltype(_getField)*       getField;
+  decltype(_getFieldInt)*    getFieldInt;
+  decltype(_getFieldDouble)* getFieldDouble;
+  decltype(_GetLed)*         getLed;
+  decltype(_isMoving)*       isMoving;
+  decltype(_getXpos)*        getXpos;
+  decltype(_getYpos)*        getYpos;
+  decltype(_getZpos)*        getZpos;
+  decltype(_getApos)*        getApos;
+  decltype(_getBpos)*        getBpos;
+  decltype(_getCpos)*        getCpos;
 };
 
 class UccncPlugin : public FactorySingleton<UccncPlugin> {
