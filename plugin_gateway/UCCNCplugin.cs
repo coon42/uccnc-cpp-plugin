@@ -355,7 +355,7 @@ namespace Plugins {
         pluginForm.Close();
       }
       catch (Exception) {
-        MessageBox.Show("Exception in msg-flow pluging!", "Error in Shutdown_event");
+        MessageBox.Show("Exception in c++ plugin!", "Error in Shutdown_event");
       }
     }
 
@@ -402,7 +402,7 @@ namespace Plugins {
         cppDll.onTick();
       }
       catch (Exception e) {
-        MessageBox.Show(String.Format("Exception in msg-flow pluging!\n {0}", e.StackTrace),
+        MessageBox.Show(String.Format("Exception in c++ plugin!\n {0}", e.StackTrace),
             "Error in Loop_event");
       }
     }
@@ -431,7 +431,7 @@ namespace Plugins {
     public void Informplugins_event(object Message) {
       if (!(pluginForm == null || pluginForm.IsDisposed)) {
         string receivedstr = Message as string;
-        MessageBox.Show(this.pluginForm, "Informplugins message received by msgflo! Message was: "
+        MessageBox.Show(this.pluginForm, "Informplugins message received by UCCNC cpp plugin! Message was: "
             + receivedstr);
       }
     }
