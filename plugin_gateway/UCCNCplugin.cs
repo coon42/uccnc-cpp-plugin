@@ -141,89 +141,88 @@ namespace Plugins {
       delayedDllOperation = DllDelayedOperation.Unload;
     }
 
+    public unsafe void unsafeStrCpy(byte* pDst, int dstBufLen, String src) {
+      // TOOD: how to do the string copy right!?
+      int len = src.Length < dstBufLen - 1 ? src.Length : dstBufLen - 1;
+
+      for (int i = 0; i < len; i++)
+        pDst[i] = (byte)src[i];
+
+      pDst[len] = (byte)'\0';
+    }
+
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public delegate bool IsMovingCallBack();
-    public IsMovingCallBack pIsMoving;
     private unsafe bool IsMovingHandler() {
       return UC.IsMoving();
     }
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
     public unsafe delegate void GetFieldCallBack(byte* pResult, int resultBufLen, bool isAS3, int fieldnumber);
-    public GetFieldCallBack pGetField;
-    private unsafe void GetFieldHandler(byte* pResult, int resultBufLen, bool isAS3, int fieldnumber) {
+    private unsafe void GetFieldHandler(byte* pField, int fieldBufLen, bool isAS3, int fieldnumber) {
       string result = UC.Getfield(isAS3, fieldnumber);
-
-      // TOOD: how to do the string copy right!?
-      int len = result.Length < resultBufLen - 1 ? result.Length : resultBufLen - 1;
-
-      for (int i = 0; i < len; i++)
-        pResult[i] = (byte)result[i];
-
-      pResult[len] = (byte)'\0';
+      unsafeStrCpy(pField, fieldBufLen, result);
     }
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public delegate int GetFieldIntCallBack(bool isAS3, int fieldnumber);
-    public GetFieldIntCallBack pGetFieldInt;
     private int GetFieldIntHandler(bool isAS3, int fieldnumber) {
       return UC.Getfieldint(isAS3, fieldnumber);
     }
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public delegate double GetFieldDoubleCallBack(bool isAS3, int fieldnumber);
-    public GetFieldDoubleCallBack pGetFieldDouble;
     private double GetFieldDoubleHandler(bool isAS3, int fieldnumber) {
       return UC.Getfielddouble(isAS3, fieldnumber);
     }
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public delegate bool GetLedCallBack(int ledNumber);
-    public GetLedCallBack pGetLed;
     private bool GetLedHandler(int ledNumber) {
       return UC.GetLED(ledNumber);
     }
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public delegate double GetXposCallBack();
-    public GetXposCallBack pGetXpos;
     private double GetXposHandler() {
       return UC.GetXpos();
     }
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public delegate double GetYposCallBack();
-    public GetYposCallBack pGetYpos;
     private double GetYposHandler() {
       return UC.GetYpos();
     }
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public delegate double GetZposCallBack();
-    public GetZposCallBack pGetZpos;
     private double GetZposHandler() {
       return UC.GetZpos();
     }
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public delegate double GetAposCallBack();
-    public GetAposCallBack pGetApos;
     private double GetAposHandler() {
       return UC.GetApos();
     }
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public delegate double GetBposCallBack();
-    public GetBposCallBack pGetBpos;
     private double GetBposHandler() {
       return UC.GetBpos();
     }
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public delegate double GetCposCallBack();
-    public GetCposCallBack pGetCpos;
     private double GetCposHandler() {
       return UC.GetCpos();
+    }
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public unsafe delegate void GetGetgcodefilenameCallBack(byte* pFileName, int fileNameBufLen);
+    private unsafe void GetgcodefilenameHandler(byte* pFileName, int fileNameBufLen) {
+      string fileName = UC.Getgcodefilename();
+      unsafeStrCpy(pFileName, fileNameBufLen, fileName);
     }
 
     [StructLayout(LayoutKind.Sequential)]
@@ -260,6 +259,9 @@ namespace Plugins {
 
       [MarshalAs(UnmanagedType.FunctionPtr)]
       public GetCposCallBack pGetCpos;
+
+      [MarshalAs(UnmanagedType.FunctionPtr)]
+      public GetGetgcodefilenameCallBack pGetGcodeFileName;
     }
 
     // Use instance variable if PluginInterfaceEntry to ensure the delegates don't get garbage collected:
@@ -286,6 +288,7 @@ namespace Plugins {
       uc_callbacks.pGetApos = new GetAposCallBack(GetAposHandler);
       uc_callbacks.pGetBpos = new GetBposCallBack(GetBposHandler);
       uc_callbacks.pGetCpos = new GetCposCallBack(GetCposHandler);
+      uc_callbacks.pGetGcodeFileName = new GetGetgcodefilenameCallBack(GetgcodefilenameHandler);
 
       // Do not load dll asynchronously at this point or Getproperties_event() call will never reach cpp dll:
       cppDll.Load();

@@ -14,6 +14,10 @@ void ExamplePlugin::onTick() {
   static int _cnt = 0;
 
   if (_cnt++ == 5) {
+    char pBuf[256];
+    UC.getGcodeFileName(pBuf, sizeof(pBuf));
+
+    dbg("Gcode file name: %s\n", pBuf);
     dbg("Coordinates: \n"
       "X=%f, Y=%f, Z=%f\n"
       "A=%f, B=%f, C=%f\n",

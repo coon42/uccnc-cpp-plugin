@@ -24,20 +24,22 @@ extern "C" {
   double __cdecl _getApos();
   double __cdecl _getBpos();
   double __cdecl _getCpos();
+  void   __cdecl _getGcodeFileName(char* pFileName, int fileNameBufLen);
 }
 
 struct PluginInterfaceEntry {
-  decltype(_getField)*       getField;
-  decltype(_getFieldInt)*    getFieldInt;
-  decltype(_getFieldDouble)* getFieldDouble;
-  decltype(_GetLed)*         getLed;
-  decltype(_isMoving)*       isMoving;
-  decltype(_getXpos)*        getXpos;
-  decltype(_getYpos)*        getYpos;
-  decltype(_getZpos)*        getZpos;
-  decltype(_getApos)*        getApos;
-  decltype(_getBpos)*        getBpos;
-  decltype(_getCpos)*        getCpos;
+  decltype(_getField)*         getField;
+  decltype(_getFieldInt)*      getFieldInt;
+  decltype(_getFieldDouble)*   getFieldDouble;
+  decltype(_GetLed)*           getLed;
+  decltype(_isMoving)*         isMoving;
+  decltype(_getXpos)*          getXpos;
+  decltype(_getYpos)*          getYpos;
+  decltype(_getZpos)*          getZpos;
+  decltype(_getApos)*          getApos;
+  decltype(_getBpos)*          getBpos;
+  decltype(_getCpos)*          getCpos;
+  decltype(_getGcodeFileName)* getGcodeFileName;
 };
 
 class UccncPlugin : public FactorySingleton<UccncPlugin> {
