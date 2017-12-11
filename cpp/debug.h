@@ -11,7 +11,7 @@
   #define trace()  __noop
 #endif
 
-void attachDebugConsole();
-void detachDebugConsole();
+int attachDebugConsole();
+int detachDebugConsole();
 
 #endif // _DEBUG_H
