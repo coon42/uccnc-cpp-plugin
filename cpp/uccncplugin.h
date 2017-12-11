@@ -60,16 +60,23 @@ public:
   // }
   // ---------------------------------------
 
+  void debugSetDebugConsoleTitle(int numPluginsLoaded) {
+    char pBuf[256];
+    sprintf_s(pBuf, sizeof(pBuf), "UCCNC C++ plugin debug console. Loaded plugins: %d\n", numPluginsLoaded);
+    SetConsoleTitle(pBuf);
+  }
+
   UccncPlugin(const string& author, const string& pluginName, const string& pluginVersion) {
 #ifdef _DEBUG
-    attachDebugConsole();
+    int numPluginsLoaded = attachDebugConsole();
 
     // Disable close button of console windows to prevent closing UCCNC accidentally:
     HWND hwnd = GetConsoleWindow();
     HMENU hmenu = GetSystemMenu(hwnd, FALSE);
     EnableMenuItem(hmenu, SC_CLOSE, MF_GRAYED);
 
-    SetConsoleTitle("UCCNC C++ plugin debug console. (Build: " __DATE__ ", " __TIME__ ")\n");
+    debugSetDebugConsoleTitle(numPluginsLoaded);
+    dbg("Build: " __DATE__ ", " __TIME__ "\n");
 #endif // _DEBUG
 
     trace();
@@ -83,7 +90,8 @@ public:
     trace();
 
 #ifdef _DEBUG
-    detachDebugConsole();
+    int numPluginsLoaded = detachDebugConsole();
+    debugSetDebugConsoleTitle(numPluginsLoaded);
 #endif // _DEBUG
   }
 
