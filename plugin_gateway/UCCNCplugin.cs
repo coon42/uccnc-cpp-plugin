@@ -300,6 +300,11 @@ namespace Plugins {
     public void Init_event(Plugininterface.Entry UC) {
       this.UC = UC;
       pluginForm = new PluginForm(this);
+
+      String value = UC.Readkey("Plugins_enabled", "msgflo.dll", "False");
+      
+      if (value.ToLower() == "true")
+        cppDll.Load();
     }
 
     // Called when the plugin is loaded, the author of the plugin should set the details of the plugin here.
@@ -312,9 +317,11 @@ namespace Plugins {
       pluginName.Append("---");
       pluginVersion.Append("---");
 
-      if (cppDll.IsLoaded())
+      if (cppDll.IsLoaded()) {
         cppDll.getproperties_event(author, pluginName, pluginVersion);
-
+        cppDll.Unload();
+      }
+           
       Properties.author = author.ToString();
       Properties.pluginname = pluginName.ToString(); ;
       Properties.pluginversion = pluginVersion.ToString();
@@ -397,7 +404,6 @@ namespace Plugins {
 
       if (isFirstCycle) {
         isFirstCycle = false;
-
         cppDll.onFirstCycle();
       }
 
