@@ -20,14 +20,8 @@ namespace Plugins {
         public static extern bool FreeLibrary(IntPtr hModule);
       }
 
-      public CppDll() {
-          string assemblyPath = Assembly.GetExecutingAssembly().Location;
-          string assemblyName = assemblyPath.Substring(assemblyPath.LastIndexOf('/') + 1);
-          string cppDllName = assemblyName.Substring(0, assemblyName.LastIndexOf('_')) + ".dll";
-          string absoluteDllPath = assemblyPath.Substring(0, assemblyPath.LastIndexOf('/')) +
-              @"/cpp/" + cppDllName;
-
-          path = absoluteDllPath;
+      public CppDll(String dllPath) {
+        path = dllPath;
       }
 
       ~CppDll() {
@@ -120,6 +114,32 @@ namespace Plugins {
 
       [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
       public delegate void SetCallBacks_t(PluginInterfaceEntry pInterface);
+    }
+
+    public string currentAssemblyFileName() {
+      string assemblyPath = Assembly.GetExecutingAssembly().Location;
+      string assemblyName = assemblyPath.Substring(assemblyPath.LastIndexOf('/') + 1);
+
+      return assemblyName;
+    }
+
+    public String cppDllName() {
+      string assemblyPath = Assembly.GetExecutingAssembly().Location;
+      string assemblyName = assemblyPath.Substring(assemblyPath.LastIndexOf('/') + 1);
+      string cppDllName = assemblyName.Substring(0, assemblyName.LastIndexOf('_')) + ".dll";
+
+      return cppDllName;
+    }
+
+    public String cppDllPath() {
+      string assemblyPath = Assembly.GetExecutingAssembly().Location;
+      string assemblyName = assemblyPath.Substring(assemblyPath.LastIndexOf('/') + 1);
+      string cppDllName = assemblyName.Substring(0, assemblyName.LastIndexOf('_')) + ".dll";
+
+      string absoluteDllPath = assemblyPath.Substring(0, assemblyPath.LastIndexOf('/')) +
+            @"/cpp/" + cppDllName;
+
+      return absoluteDllPath;
     }
 
     // Do loading and unloading of dll in a safe state to avoid unloading while code in dll is executed.
@@ -273,7 +293,7 @@ namespace Plugins {
     public CppDll cppDll;
 
     public unsafe UCCNCplugin() {
-      cppDll = new CppDll();
+      cppDll = new CppDll(cppDllPath());
       delayedDllOperation = DllDelayedOperation.None;
 
       uc_callbacks = new PluginInterfaceEntry();
@@ -301,9 +321,10 @@ namespace Plugins {
       this.UC = UC;
       pluginForm = new PluginForm(this);
 
-      String value = UC.Readkey("Plugins_enabled", "msgflo.dll", "False");
-      
-      if (value.ToLower() == "true")
+      String assemblyFileName = currentAssemblyFileName();
+      String value = UC.Readkey("Plugins_enabled", assemblyFileName, "undefined").ToLower();
+
+      if (value == "true")
         cppDll.Load();
     }
 
@@ -321,7 +342,7 @@ namespace Plugins {
         cppDll.getproperties_event(author, pluginName, pluginVersion);
         cppDll.Unload();
       }
-           
+
       Properties.author = author.ToString();
       Properties.pluginname = pluginName.ToString(); ;
       Properties.pluginversion = pluginVersion.ToString();
