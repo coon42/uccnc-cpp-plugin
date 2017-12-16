@@ -284,6 +284,11 @@ namespace Plugins {
       public GetGetgcodefilenameCallBack pGetGcodeFileName;
     }
 
+    void exceptionHandler(Exception e, String where) {
+      MessageBox.Show(String.Format("Exception in c++ plugin '{0}'!\n {1}", cppDllName(), e.StackTrace),
+          where);
+    }
+
     // Use instance variable if PluginInterfaceEntry to ensure the delegates don't get garbage collected:
     private PluginInterfaceEntry uc_callbacks;
     public Plugininterface.Entry UC;
@@ -385,8 +390,8 @@ namespace Plugins {
 
         pluginForm.Close();
       }
-      catch (Exception) {
-        MessageBox.Show("Exception in c++ plugin!", "Error in Shutdown_event");
+      catch (Exception e) {
+        exceptionHandler(e, "Shutdown_event");
       }
     }
 
@@ -432,8 +437,7 @@ namespace Plugins {
         cppDll.onTick();
       }
       catch (Exception e) {
-        MessageBox.Show(String.Format("Exception in c++ plugin!\n {0}", e.StackTrace),
-            "Error in Loop_event");
+        exceptionHandler(e, "LoopEvent");
       }
     }
 
