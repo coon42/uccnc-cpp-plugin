@@ -25,6 +25,7 @@ extern "C" {
   double __cdecl _getBpos();
   double __cdecl _getCpos();
   void   __cdecl _getGcodeFileName(char* pFileName, int fileNameBufLen);
+  void   __cdecl _code(char* pCode);
 }
 
 struct PluginInterfaceEntry {
@@ -40,6 +41,7 @@ struct PluginInterfaceEntry {
   decltype(_getBpos)*          getBpos;
   decltype(_getCpos)*          getCpos;
   decltype(_getGcodeFileName)* getGcodeFileName;
+  decltype(_code)*             code;
 };
 
 class UccncPlugin : public FactorySingleton<UccncPlugin> {

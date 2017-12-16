@@ -171,10 +171,24 @@ namespace Plugins {
       pDst[len] = (byte)'\0';
     }
 
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate bool IsMovingCallBack();
-    private unsafe bool IsMovingHandler() {
-      return UC.IsMoving();
+    public unsafe int unsafeStrLen(byte* pUnsafeCStr) {
+      int i = 0;
+
+      while (pUnsafeCStr[i] != '\0')
+        i++;
+
+      return i;
+    }
+
+    public unsafe String unsafeByteToStr(byte* pUnsafeCStr) {
+      // TOOD: how to do the string copy right!?
+      String s = "";
+      int len = unsafeStrLen(pUnsafeCStr);
+
+      for(int i = 0; i < len; i++)
+        s += (char)pUnsafeCStr[i];
+
+      return s;
     }
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
@@ -200,6 +214,12 @@ namespace Plugins {
     public delegate bool GetLedCallBack(int ledNumber);
     private bool GetLedHandler(int ledNumber) {
       return UC.GetLED(ledNumber);
+    }
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate bool IsMovingCallBack();
+    private unsafe bool IsMovingHandler() {
+      return UC.IsMoving();
     }
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
@@ -245,6 +265,13 @@ namespace Plugins {
       unsafeStrCpy(pFileName, fileNameBufLen, fileName);
     }
 
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public unsafe delegate void CodeCallBack(byte* pCode);
+    private unsafe void codeHandler(byte* pCode) {
+      String code = unsafeByteToStr(pCode);
+      UC.Code(code);
+    }
+
     [StructLayout(LayoutKind.Sequential)]
     public struct PluginInterfaceEntry {
       [MarshalAs(UnmanagedType.FunctionPtr)]
@@ -282,6 +309,9 @@ namespace Plugins {
 
       [MarshalAs(UnmanagedType.FunctionPtr)]
       public GetGetgcodefilenameCallBack pGetGcodeFileName;
+
+      [MarshalAs(UnmanagedType.FunctionPtr)]
+      public CodeCallBack pCode;
     }
 
     void exceptionHandler(Exception e, String where) {
@@ -314,6 +344,7 @@ namespace Plugins {
       uc_callbacks.pGetBpos = new GetBposCallBack(GetBposHandler);
       uc_callbacks.pGetCpos = new GetCposCallBack(GetCposHandler);
       uc_callbacks.pGetGcodeFileName = new GetGetgcodefilenameCallBack(GetgcodefilenameHandler);
+      uc_callbacks.pCode = new CodeCallBack(codeHandler);
 
       // Do not load dll asynchronously at this point or Getproperties_event() call will never reach cpp dll:
       cppDll.Load();
