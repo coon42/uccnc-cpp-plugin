@@ -268,6 +268,7 @@ namespace Plugins {
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public unsafe delegate void CodeCallBack(byte* pCode);
     private unsafe void codeHandler(byte* pCode) {
+      MessageBox.Show("codeHandler");
       String code = unsafeByteToStr(pCode);
       UC.Code(code);
     }
@@ -331,20 +332,25 @@ namespace Plugins {
       cppDll = new CppDll(cppDllPath());
       delayedDllOperation = DllDelayedOperation.None;
 
-      uc_callbacks = new PluginInterfaceEntry();
-      uc_callbacks.pGetField = new GetFieldCallBack(GetFieldHandler);
-      uc_callbacks.pGetFieldInt = new GetFieldIntCallBack(GetFieldIntHandler);
-      uc_callbacks.pGetFieldDouble = new GetFieldDoubleCallBack(GetFieldDoubleHandler);
-      uc_callbacks.pGetLed = new GetLedCallBack(GetLedHandler);
-      uc_callbacks.pIsMoving = new IsMovingCallBack(IsMovingHandler);
-      uc_callbacks.pGetXpos = new GetXposCallBack(GetXposHandler);
-      uc_callbacks.pGetYpos = new GetYposCallBack(GetYposHandler);
-      uc_callbacks.pGetZpos = new GetZposCallBack(GetZposHandler);
-      uc_callbacks.pGetApos = new GetAposCallBack(GetAposHandler);
-      uc_callbacks.pGetBpos = new GetBposCallBack(GetBposHandler);
-      uc_callbacks.pGetCpos = new GetCposCallBack(GetCposHandler);
-      uc_callbacks.pGetGcodeFileName = new GetGetgcodefilenameCallBack(GetgcodefilenameHandler);
-      uc_callbacks.pCode = new CodeCallBack(codeHandler);
+      try {
+        uc_callbacks = new PluginInterfaceEntry();
+        uc_callbacks.pGetField = new GetFieldCallBack(GetFieldHandler);
+        uc_callbacks.pGetFieldInt = new GetFieldIntCallBack(GetFieldIntHandler);
+        uc_callbacks.pGetFieldDouble = new GetFieldDoubleCallBack(GetFieldDoubleHandler);
+        uc_callbacks.pGetLed = new GetLedCallBack(GetLedHandler);
+        uc_callbacks.pIsMoving = new IsMovingCallBack(IsMovingHandler);
+        uc_callbacks.pGetXpos = new GetXposCallBack(GetXposHandler);
+        uc_callbacks.pGetYpos = new GetYposCallBack(GetYposHandler);
+        uc_callbacks.pGetZpos = new GetZposCallBack(GetZposHandler);
+        uc_callbacks.pGetApos = new GetAposCallBack(GetAposHandler);
+        uc_callbacks.pGetBpos = new GetBposCallBack(GetBposHandler);
+        uc_callbacks.pGetCpos = new GetCposCallBack(GetCposHandler);
+        uc_callbacks.pGetGcodeFileName = new GetGetgcodefilenameCallBack(GetgcodefilenameHandler);
+        uc_callbacks.pCode = new CodeCallBack(codeHandler);
+      }
+      catch(Exception e) {
+        exceptionHandler(e, "setting uc_callbacks");
+      }
 
       // Do not load dll asynchronously at this point or Getproperties_event() call will never reach cpp dll:
       cppDll.Load();
@@ -360,8 +366,10 @@ namespace Plugins {
       String assemblyFileName = currentAssemblyFileName();
       String value = UC.Readkey("Plugins_enabled", assemblyFileName, "undefined").ToLower();
 
-      if (value == "true")
+      if (value == "true") {
         cppDll.Load();
+        cppDll.setCallBacks(uc_callbacks);
+      }
     }
 
     // Called when the plugin is loaded, the author of the plugin should set the details of the plugin here.
