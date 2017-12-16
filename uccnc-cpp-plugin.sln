@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27004.2009
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "plugin_gateway", "plugin_gateway\plugin_gateway.csproj", "{833AB583-1D7E-4A87-B28A-AF828B2948FF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "plugin_proxy", "plugin_proxy\plugin_proxy.csproj", "{833AB583-1D7E-4A87-B28A-AF828B2948FF}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "example", "cpp\example\example.vcxproj", "{F04719F6-5043-44A4-A017-B1BE8AD86C4B}"
 EndProject
