@@ -1,8 +1,8 @@
-# C++ binding plugin for UCCNC
+# Native C++ binding plugin for UCCNC
 
 ### Description ###
-- This UCCNC plugin allows implementing plugins in C++ instead of using any .NET language.
-- The .NET assembly which is loaded by UCCNC only acts as a gateway between C++ dll and UCCNC .NET plugin interface
+- This UCCNC plugin allows implementing plugins in native C++ instead of using any .NET language.
+- The .NET assembly which is loaded by UCCNC only acts as a proxy between C++ dll and UCCNC .NET plugin interface
 - The assembly loads the C++ dll after it got loaded by UCCNC
 
 ### How to use ###
@@ -10,9 +10,9 @@
 - switch to UCCNC installation directory (Usually **C:\UCCNC\Plugins**)
 - create cpp directory (if it does not exist already)
 - copy **example.dll** from **Debug** directory to **C:\UCCNC\Plugins\cpp**
-- copy **plugin_gateway.dll** to **C:\UCCNC\Plugins** directory
-- rename **plugin_gateway.dll** to **example_gateway.dll**
-  - The assembly will load a cpp plugin depending of its name. If it is called **plugin_gateway.dll** it will load **plugin.dll** from cpp subdirectory. If it is called **example_gateway.dll** it will load **example.dll** etc.
+- copy **plugin_proxy.dll** to **C:\UCCNC\Plugins** directory
+- rename **plugin_proxy.dll** to **example_proxy.dll**
+  - The assembly will load a cpp plugin depending of its name. If it is called **plugin_proxy.dll** it will load **plugin.dll** from cpp subdirectory. If it is called **example_proxy.dll** it will load **example.dll** etc.
 
 ### Features ###
 - Use modern C++ without any feature limitations
