@@ -268,7 +268,6 @@ namespace Plugins {
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public unsafe delegate void CodeCallBack(byte* pCode);
     private unsafe void codeHandler(byte* pCode) {
-      MessageBox.Show("codeHandler");
       String code = unsafeByteToStr(pCode);
       UC.Code(code);
     }
