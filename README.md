@@ -8,11 +8,11 @@
 ### How to use ###
 - open **uccnc-cpp-plugin.sln** and compile it using Visual Studio 2017
 - switch to UCCNC installation directory (Usually **C:\UCCNC\Plugins**)
-- create cpp directory (if it does not exist already)
+- create a directory called **cpp** (if it does not exist already)
 - copy **example.dll** from **Debug** directory to **C:\UCCNC\Plugins\cpp**
 - copy **plugin_proxy.dll** to **C:\UCCNC\Plugins** directory
 - rename **plugin_proxy.dll** to **example_proxy.dll**
-  - The assembly will load a cpp plugin depending of its name. If it is called **plugin_proxy.dll** it will load **plugin.dll** from cpp subdirectory. If it is called **example_proxy.dll** it will load **example.dll** etc.
+  - The assembly will load a cpp plugin depending on its name. If it is called **plugin_proxy.dll** it will load **plugin.dll** from **cpp** subdirectory. If it is called **example_proxy.dll** it will load **example.dll** etc.
 
 ### Features ###
 - Use modern C++ without any feature limitations
